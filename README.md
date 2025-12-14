@@ -1,45 +1,40 @@
-Android Login Application
-Overview
+> **1. Project Overview**
 
-This project is an extended version of a basic Android login app. The purpose of this application is to understand Android UI design, activity navigation, and Intent usage in Android Studio using Java and XML.
+This Android application is developed to understand basic UI design, activity navigation, and Intent-based communication in Android Studio using Java and XML.
 
-Base Project
+> **2. Base Project**
 
-Starter project link:
+The project is based on the following starter repository:
 https://github.com/Azzzhar7/android-login-app
 
-Features Implemented
-Login
+> **3. Implemented Features**
+3.1 Login Functionality
 
-Login system using hard-coded username and password
+Login using hard-coded username and password
 
-Displays success or error message
+Input validation with success and error messages
 
-Redirects to Home screen after successful login
+Redirects user to the Home screen after successful login
 
-Additional Screens
+3.2 Additional Screens (Activities)
 
-Registration Screen – allows user to create a new account
+Registration Screen – user account creation interface
 
-Forgot Password Screen – helps user recover password
+Forgot Password Screen – password recovery option
 
-Reset Password Screen – allows user to reset password
+Reset Password Screen – update password functionality
 
-Home (Landing) Screen – shown after successful login
+Home (Landing) Screen – welcome screen after login
 
-Navigation
+3.3 Navigation & Redirection
 
-Navigation between activities using Intents
+Activity navigation implemented using Intents
 
-Buttons and text links for:
+Register and Forgot Password links added on Login screen
 
-Register
+Smooth navigation between all screens
 
-Forgot Password
-
-Proper redirection after login
-
-Technologies Used
+> **4. Technologies Used**
 
 Java
 
@@ -47,7 +42,15 @@ XML
 
 Android Studio
 
-Author
+> **5. Submission Details**
+
+Source code uploaded to GitHub
+
+Screenshots of code, emulator output, and GitHub repository included
+
+README file describing features and navigation
+
+> **6. Author Information**
 
 Zohaib Madni
 Software Engineering – 5th Semester
