@@ -7,17 +7,25 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
+import com.example.androidproject.db.AppDatabase;
+import com.example.androidproject.db.User;
+import com.example.androidproject.db.UserDao;
 
 public class ResetPasswordActivity extends AppCompatActivity {
 
     EditText etNewPassword, etConfirmPassword;
     Button btnUpdatePassword;
     TextView tvBackToLoginFromReset;
+    private AppDatabase db;
+    private String userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
+
+        db = AppDatabase.getDatabase(getApplicationContext());
+        userEmail = getIntent().getStringExtra("email");
 
         etNewPassword = findViewById(R.id.etNewPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
@@ -33,10 +41,20 @@ public class ResetPasswordActivity extends AppCompatActivity {
             } else if (!newPass.equals(confirmPass)) {
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Password updated successfully!", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                new Thread(() -> {
+                    UserDao userDao = db.userDao();
+                    User user = userDao.findByEmail(userEmail);
+                    if (user != null) {
+                        user.password = newPass;
+                        userDao.update(user);
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "Password updated successfully!", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        });
+                    }
+                }).start();
             }
         });
 

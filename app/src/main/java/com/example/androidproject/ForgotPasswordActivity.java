@@ -7,17 +7,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
+import com.example.androidproject.db.AppDatabase;
+import com.example.androidproject.db.User;
+import com.example.androidproject.db.UserDao;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     EditText etEmail;
     Button btnResetPassword;
     TextView tvBackToLogin;
+    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
+
+        db = AppDatabase.getDatabase(getApplicationContext());
 
         etEmail = findViewById(R.id.etEmail);
         btnResetPassword = findViewById(R.id.btnResetPassword);
@@ -28,12 +34,22 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
             if (email.isEmpty()) {
                 Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show();
-            } else {
-                // In real app: send reset link or redirect to Reset Password Activity
-                Toast.makeText(this, "Reset link sent to " + email, Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(ForgotPasswordActivity.this, ResetPasswordActivity.class);
-                startActivity(intent);
+                return;
             }
+
+            new Thread(() -> {
+                UserDao userDao = db.userDao();
+                User user = userDao.findByEmail(email);
+                if (user != null) {
+                    runOnUiThread(() -> {
+                        Intent intent = new Intent(ForgotPasswordActivity.this, ResetPasswordActivity.class);
+                        intent.putExtra("email", email);
+                        startActivity(intent);
+                    });
+                } else {
+                    runOnUiThread(() -> Toast.makeText(ForgotPasswordActivity.this, "User not found", Toast.LENGTH_SHORT).show());
+                }
+            }).start();
         });
 
         tvBackToLogin.setOnClickListener(v -> {
